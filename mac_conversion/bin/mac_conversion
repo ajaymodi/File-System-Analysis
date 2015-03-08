@@ -1,0 +1,11 @@
+#!/usr/bin/env ruby
+
+require_relative "../lib/mac_conversion"
+
+begin
+  MacConversion::Application.new(ARGV).run
+rescue Errno::ENOENT => err
+  abort "mac_conversion: #{err.message}"
+rescue OptionParser::InvalidOption => err
+  abort "mac_conversion: #{err.message}\nusage: mac_conversion -T|-D [-f filename] [-h hex value]"
+end

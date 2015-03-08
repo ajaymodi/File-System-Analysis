@@ -2,7 +2,6 @@ module Address4Forensics
   class Display
     def initialize(params)
       @params   = params
-      @answer   = -1
     end
 
     # private
@@ -17,7 +16,6 @@ module Address4Forensics
         address = @params[:physical_address]
       end
       address = subtract_partition_offset(address)
-      
       if(@params[:logical_address])
         address = @params[:logical_address]
       end
