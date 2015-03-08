@@ -1,0 +1,11 @@
+#!/usr/bin/env ruby
+
+require_relative "../lib/address4forensics"
+
+begin
+  Address4Forensics::Application.new(ARGV).run
+rescue Errno::ENOENT => err
+  abort "address4forensics: #{err.message}"
+rescue OptionParser::InvalidOption => err
+  abort "address4forensics: #{err.message}\nusage: address4forensics -L|-P|-C [-b offset] [-B [-s bytes]] [-l address] [-p address] [-c address -k sectors -r sectors -t tables -f sectors]"
+end
