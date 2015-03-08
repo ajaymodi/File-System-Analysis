@@ -5,31 +5,7 @@ module Address4Forensics
       @answer   = -1
     end
 
-    
-    def run
-      if @params[:calculation].empty?
-        puts "You are missing parameters."
-      elsif @params[:calculation]== :calculate_logical_address
-        answer_in_sectors = calculate_logical_address
-      elsif @params[:calculation]== :calculate_physical_address
-        answer_in_sectors = calculate_physical_address
-      elsif @params[:calculation]== :calculate_cluster_address
-        answer_in_sectors = calculate_cluster_address
-      end
-      if(@params[:byte_address])
-        if(params[:sector_size])
-          answer = answer_in_sectors * params[:sector_size]
-        else
-          answer = answer_in_sectors * 512
-        end
-      else
-        answer = answer_in_sectors
-      end
-      return answer
-    end
-
-
-    private
+    # private
 
     # attr_reader :line_numbering_style, :squeeze_extra_newlines, :line_number
 
@@ -41,22 +17,19 @@ module Address4Forensics
         address = @params[:physical_address]
       end
 
-      if @params[:partition_start_offset]
-        address = subtract_partition_offset(address)
-      end
+      address = subtract_partition_offset(address)
       return address
     end
 
     def convert_cluster_to_physical_address
         adrs = 0
-        no_of_fat = params[:fat_tables]
-        sectors_in_fat = params[:fat_length]
-        reserved_sectors = params[:reserved_sectors]
-        sectors_per_cluster =  params[:cluster_size]
+        no_of_fat = @params[:fat_tables]
+        sectors_in_fat = @params[:fat_length]
+        reserved_sectors = @params[:reserved_sectors]
+        sectors_per_cluster =  @params[:cluster_size]
         default_cluster_number = 2
         cluster_known_address = @params[:cluster_address]
-        adrs = add_partition_offset(adrs)+(cluster_known_address-default_cluster_number)*sectors_per_cluster+reserved_sectors
-        +(no_of_fat*sectors_in_fat) 
+        adrs = add_partition_offset(adrs)+(cluster_known_address-default_cluster_number)*sectors_per_cluster+reserved_sectors+(no_of_fat*sectors_in_fat) 
     end
 
     def calculate_physical_address
@@ -65,21 +38,27 @@ module Address4Forensics
         address = convert_cluster_to_physical_address
       else
         address = @params[:logical_address]
-        if @params[:partition_start_offset]
-          address = add_partition_offset(address)
-        end
+        address = add_partition_offset(address)
       end
       return address
     end
 
     def add_partition_offset adr
-      offset = @params[:partition_start_offset]
-      return adr+offset
+      if @params[:partition_start_offset]
+        offset = @params[:partition_start_offset]
+        return adr+offset
+      else
+        return adr
+      end
     end
 
     def subtract_partition_offset adr
-      offset = @params[:partition_start_offset]
-      return adr-offset
+      if @params[:partition_start_offset]
+        offset = @params[:partition_start_offset]
+        return adr-offset
+      else
+        return adr
+      end
     end
     
     def calculate_cluster_address
