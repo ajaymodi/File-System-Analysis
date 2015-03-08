@@ -36,14 +36,14 @@ module MacConversion
 
       if @params[:conversion].empty? 
         puts "You are missing parameters."
-      elsif @display.check_valid_hex(args)
+      elsif !@display.check_valid_hex(args)
         puts "Enter Valid hex numbers."
       elsif @params[:conversion]== "convert_time"
         result = @display.convert_time(args)
       elsif @params[:conversion]== "convert_date"
         result = @display.convert_date(args)
       end
-      puts format(result)
+      puts result
     end
 
     def parse_options(argv)
