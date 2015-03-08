@@ -13,11 +13,14 @@ module Address4Forensics
       address = 0
       if(@params[:cluster_known_address]  == true)
         address = convert_cluster_to_physical_address
-      else
+      elsif @params[:physical_address]
         address = @params[:physical_address]
       end
-
       address = subtract_partition_offset(address)
+      
+      if(@params[:logical_address])
+        address = @params[:logical_address]
+      end
       return address
     end
 
@@ -36,9 +39,11 @@ module Address4Forensics
       address = 0
       if(@params[:cluster_known_address]  == true)
         address = convert_cluster_to_physical_address
-      else
+      elsif @params[:logical_address]
         address = @params[:logical_address]
         address = add_partition_offset(address)
+      else
+        address = @params[:physical_address]
       end
       return address
     end
@@ -69,7 +74,7 @@ module Address4Forensics
         address = subtract_partition_offset(params[:physical_address])
         address = convert_logical_to_cluster_address
       else
-        
+        address = @params[:cluster_address]
       end
       return address
     end
