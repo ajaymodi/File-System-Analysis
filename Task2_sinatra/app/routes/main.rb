@@ -1,5 +1,6 @@
 #default root
 require 'json'
+require 'debugger'
 
 get "/" do
   erb :index
@@ -7,10 +8,10 @@ end
 
 post "/add_files" do
   puts params
-  { :fullpath => params["filepath"], :key2 => 'value2' }.to_json
-end
-
-get '/example.json' do
-  content_type :json
-  { :key1 => 'value1', :key2 => 'value2' }.to_json
+  
+  if(File.exist?(params["filepath"]))
+  	a = { :fullpath => params["filepath"], :filename => File.basename(params["filepath"]), :size => File.size?(params["filepath"])   }.to_json
+  else
+  	{ :error => "file does not exist"}.to_json
+  end
 end

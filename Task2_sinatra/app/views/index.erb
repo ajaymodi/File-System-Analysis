@@ -1,7 +1,6 @@
 <div class="container">
     <!-- The fileinput-button span is used to style the file input field as button -->
     <h2> Post Acquisition Forensics Analysis </h2>
-     <form id="fileupload"  method="POST" enctype="multipart/form-data">
         <!-- Redirect browsers with JavaScript disabled to the origin page -->
         <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
         <div class="row fileupload-buttonbar">
@@ -30,7 +29,6 @@
         </div>
         <div class="row">
           <div class="col-xs-6">
-            </form>
             <table  role="presentation" class="table table-striped">
                 <tbody id="presentation_table" class="files">
                 </tbody>
@@ -73,32 +71,34 @@ $(document).ready(function(){
           url: "/add_files",
           data: dataString,
           cache: false,
-          done: function (e, data) {
-            $.each(data.result.files, function (index, file) {
-                console.log(file);
-                var b = $("<div>"+file["size"]+"</div>").filesize()[0];
-                var c = '<tr data-toggle="table" class="template-upload fade in"><td><p class="name">'+file["name"]+'</p><strong class="error text-danger"></strong></td><td><p>'+$(b).text()+'</p></td><td class="col-lg-1"><button class="btn btn-primary start calculate"><i class="glyphicon glyphicon-upload"></i><span>Calculate</span></button></td><td class="col-lg-1"><button class="btn btn-danger delete" id="123"><i class="glyphicon glyphicon-trash"></i><span>Cancel</span></button></td></tr><tr class="hidden"><td colspan="4">Some text from row 1</td></tr>';
+          success: function(data){  
+            data = JSON.parse(data);
+              if(data.hasOwnProperty('error')){
+                alert(data["error"]);
+              }
+              else{
+                var b = $("<div>"+data["size"]+"</div>").filesize()[0];
+
+                var c = '<tr data-toggle="table" class="template-upload fade in"><td><p class="name">'+data["filename"]+'</p><strong class="error text-danger"></strong></td><td><p>'+$(b).text()+'</p></td><td class="col-lg-1"><button class="btn btn-primary start calculate"><i class="glyphicon glyphicon-upload"></i><span>Calculate</span></button></td><td class="col-lg-1"><button class="btn btn-danger delete" id="123"><i class="glyphicon glyphicon-trash"></i><span>Cancel</span></button></td><td style="display:none;">'+data["fullpath"]+'</td></tr>';
                
-               $("#presentation_table").append(c);
+                $("#presentation_table").append(c);
 
                 $("#presentation_table .delete").on('click', function () {
                     $(this).parent().parent().remove();
                 });
 
                 $("#presentation_table .calculate").on('click',function(){
-                    $("#bq").text("abc");
+                    $("#bq").text("Result: ");
                 });
-
-
-            });
-          }
+              }
+            },
+          error: function(XMLHttpRequest, textStatus, errorThrown) { 
+              alert("Status: " + textStatus); alert("Error: " + errorThrown); 
+          }       
         });
       }
       
     });
-
-
-
 });
 
 </script>
