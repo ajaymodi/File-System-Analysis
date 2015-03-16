@@ -79,7 +79,7 @@ $(document).ready(function(){
               else{
                 var b = $("<div>"+data["size"]+"</div>").filesize()[0];
 
-                var c = '<tr data-toggle="table" class="template-upload fade in"><td><p class="name">'+data["filename"]+'</p><strong class="error text-danger"></strong></td><td><p>'+$(b).text()+'</p></td><td class="col-lg-1"><button class="btn btn-primary start calculate"><i class="glyphicon glyphicon-upload"></i><span>Calculate</span></button></td><td class="col-lg-1"><button class="btn btn-danger delete" id="123"><i class="glyphicon glyphicon-trash"></i><span>Cancel</span></button></td><td style="display:none;">'+data["fullpath"]+'</td></tr>';
+                var c = '<tr data-toggle="table" class="template-upload fade in"><td><p class="name">'+data["filename"]+'</p><strong class="error text-danger"></strong></td><td><p>'+$(b).text()+'</p></td><td class="col-lg-1"><button class="btn btn-primary start calculate"><i class="glyphicon glyphicon-upload"></i><span>Calculate</span></button></td><td class="col-lg-1"><button class="btn btn-danger delete" id="123"><i class="glyphicon glyphicon-trash"></i><span>Cancel</span></button></td><td class="fullpath" style="display:none;">'+data["fullpath"]+'</td></tr>';
                
                 $("#presentation_table").append(c);
 
@@ -88,7 +88,17 @@ $(document).ready(function(){
                 });
 
                 $("#presentation_table .calculate").on('click',function(){
-                    $("#bq").text("Result: ");
+                    var fileString = 'filepath='+$(this).parent().parent().children(".fullpath").text();
+                    $.ajax({
+                      type: "POST",
+                      url: "/calculate_files",
+                      data: fileString,
+                      cache: false,
+                      success: function(data){  
+               
+                        $("#bq").text("Result: ");
+                      }
+                    });
                 });
               }
             },
