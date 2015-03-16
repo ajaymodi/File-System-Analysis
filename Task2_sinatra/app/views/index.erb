@@ -1,0 +1,104 @@
+<div class="container">
+    <!-- The fileinput-button span is used to style the file input field as button -->
+    <h2> Post Acquisition Forensics Analysis </h2>
+     <form id="fileupload"  method="POST" enctype="multipart/form-data">
+        <!-- Redirect browsers with JavaScript disabled to the origin page -->
+        <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
+        <div class="row fileupload-buttonbar">
+            <div class="col-lg-7">
+                <!-- The fileinput-button span is used to style the file input field as button -->
+                
+                <div class="form-group col-lg-8">
+                  <input type="text" class="form-control" id="path" placeholder="Enter your path..."> 
+                </div>
+                  <button id="addfiles" class="btn btn-success fileinput-button">
+                    <i class="glyphicon glyphicon-plus"></i>
+                    <span>Add files...</span>
+                  </button>
+                
+                <span class="fileupload-process"></span>
+            </div>
+            <!-- The global progress state -->
+            <div class="col-lg-5 fileupload-progress fade">
+                <!-- The global progress bar -->
+                <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+                    <div class="progress-bar progress-bar-success" style="width:0%;"></div>
+                </div>
+                <!-- The extended global progress state -->
+                <div class="progress-extended">&nbsp;</div>
+            </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-6">
+            </form>
+            <table  role="presentation" class="table table-striped">
+                <tbody id="presentation_table" class="files">
+                </tbody>
+            </table>
+          </div>
+          <div class="col-xs-6">
+            <blockquote id="bq">
+              <p>File Upload widget with multiple file selection, drag&amp;drop support, progress bar, validation and preview images, audio and video for jQuery.<br>
+              Supports cross-domain, chunked and resumable file uploads and client-side image resizing.<br>
+              Works with any server-side platform (PHP, Python, Ruby on Rails, Java, Node.js, Go etc.) that supports standard HTML form file uploads.</p>
+          </blockquote>
+          </div>
+        </div>
+        <!-- The table listing the files available for upload/download -->
+        
+    
+    <br>
+
+</div>
+
+
+<script>
+/*jslint unparam: true, regexp: true */
+/*global window, $ */
+$(document).ready(function(){
+
+
+    $("#addfiles").on('click',function(){
+      var path = $("#path").val();
+      var dataString = 'filepath='+path;
+      if(path=='')
+      {
+        alert("Please Fill file path");
+      }
+      else
+      {
+      // AJAX Code To Submit Form.
+        $.ajax({
+          type: "POST",
+          url: "/add_files",
+          data: dataString,
+          cache: false,
+          done: function (e, data) {
+            $.each(data.result.files, function (index, file) {
+                console.log(file);
+                var b = $("<div>"+file["size"]+"</div>").filesize()[0];
+                var c = '<tr data-toggle="table" class="template-upload fade in"><td><p class="name">'+file["name"]+'</p><strong class="error text-danger"></strong></td><td><p>'+$(b).text()+'</p></td><td class="col-lg-1"><button class="btn btn-primary start calculate"><i class="glyphicon glyphicon-upload"></i><span>Calculate</span></button></td><td class="col-lg-1"><button class="btn btn-danger delete" id="123"><i class="glyphicon glyphicon-trash"></i><span>Cancel</span></button></td></tr><tr class="hidden"><td colspan="4">Some text from row 1</td></tr>';
+               
+               $("#presentation_table").append(c);
+
+                $("#presentation_table .delete").on('click', function () {
+                    $(this).parent().parent().remove();
+                });
+
+                $("#presentation_table .calculate").on('click',function(){
+                    $("#bq").text("abc");
+                });
+
+
+            });
+          }
+        });
+      }
+      
+    });
+
+
+
+});
+
+</script>
