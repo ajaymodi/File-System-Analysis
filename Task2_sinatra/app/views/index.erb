@@ -36,9 +36,15 @@
           </div>
           <div class="col-xs-6">
             <blockquote id="bq">
-              <p>File Upload widget with multiple file selection, drag&amp;drop support, progress bar, validation and preview images, audio and video for jQuery.<br>
-              Supports cross-domain, chunked and resumable file uploads and client-side image resizing.<br>
-              Works with any server-side platform (PHP, Python, Ruby on Rails, Java, Node.js, Go etc.) that supports standard HTML form file uploads.</p>
+              <p><b>Result:</b><br>
+              <font id ="filename"> </font><br>
+              <font id ="md5"> </font><br>
+              <font id ="sha1"> </font><br>
+              <font id ="partition1"> </font><br>
+              <font id ="partition2"> </font><br>
+              <font id ="partition3"> </font><br>
+              <font id ="partition4"> </font><br>
+              </p>
           </blockquote>
           </div>
         </div>
@@ -94,9 +100,15 @@ $(document).ready(function(){
                       url: "/calculate_files",
                       data: fileString,
                       cache: false,
-                      success: function(data){  
-               
-                        $("#bq").text("Result: ");
+                      success: function(data2){  
+                        data2 = JSON.parse(data2);
+                        $("#filename").text("File: "+data2["filename"]);
+                        $("#sha1").text("SHA1: "+data2["SHA1"]);
+                        $("#md5").text("MD5: "+data2["MD5"]);
+                        $("#partition1").text("Partition1: "+data2["partition"]["partition1"]["type"]+', '+data2["partition"]["partition1"]["starting_address"]+', '+data2["partition"]["partition1"]["size"]);
+                        $("#partition2").text("Partition2: "+data2["partition"]["partition2"]["type"]+', '+data2["partition"]["partition2"]["starting_address"]+', '+data2["partition"]["partition2"]["size"]);
+                        $("#partition3").text("Partition3: "+data2["partition"]["partition3"]["type"]+', '+data2["partition"]["partition3"]["starting_address"]+', '+data2["partition"]["partition3"]["size"]);
+                        $("#partition4").text("Partition4: "+data2["partition"]["partition4"]["type"]+', '+data2["partition"]["partition4"]["starting_address"]+', '+data2["partition"]["partition4"]["size"]);
                       }
                     });
                 });
