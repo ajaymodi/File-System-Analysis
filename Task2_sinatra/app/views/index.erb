@@ -40,10 +40,10 @@
               <font id ="filename"> </font><br>
               <font id ="md5"> </font><br>
               <font id ="sha1"> </font><br>
-              <font id ="partition1"> </font><br>
-              <font id ="partition2"> </font><br>
-              <font id ="partition3"> </font><br>
-              <font id ="partition4"> </font><br>
+              <table  role="presentation" class="table table-striped">
+                <tbody id="partition_table" class="partition">
+                </tbody>
+              </table>
               </p>
           </blockquote>
           </div>
@@ -105,10 +105,43 @@ $(document).ready(function(){
                         $("#filename").text("File: "+data2["filename"]);
                         $("#sha1").text("SHA1: "+data2["SHA1"]);
                         $("#md5").text("MD5: "+data2["MD5"]);
-                        $("#partition1").text("Partition1: "+data2["partition"]["partition1"]["type"]+', '+data2["partition"]["partition1"]["starting_address"]+', '+data2["partition"]["partition1"]["size"]);
-                        $("#partition2").text("Partition2: "+data2["partition"]["partition2"]["type"]+', '+data2["partition"]["partition2"]["starting_address"]+', '+data2["partition"]["partition2"]["size"]);
-                        $("#partition3").text("Partition3: "+data2["partition"]["partition3"]["type"]+', '+data2["partition"]["partition3"]["starting_address"]+', '+data2["partition"]["partition3"]["size"]);
-                        $("#partition4").text("Partition4: "+data2["partition"]["partition4"]["type"]+', '+data2["partition"]["partition4"]["starting_address"]+', '+data2["partition"]["partition4"]["size"]);
+
+                         var partitions = '<tr data-toggle="table" class="template-upload fade in"><td><b>Partitions</td><td><b>Type</td><td><b>Starting Address</td><td><b>Size</b></td>';
+
+
+                        partitions += '<tr data-toggle="table" class="template-upload fade in"><td><b>Partition1:</b></td><td>'+data2["partition"]["partition1"]["type"]+'</td><td>'+data2["partition"]["partition1"]["starting_address"]+'</td><td>'+data2["partition"]["partition1"]["size"]+'</td>';
+
+                        partitions += '<tr data-toggle="table" class="template-upload fade in"><td><b>Partition2:</b></td><td>'+data2["partition"]["partition2"]["type"]+'</td><td>'+data2["partition"]["partition2"]["starting_address"]+'</td><td>'+data2["partition"]["partition2"]["size"]+'</td>';
+
+                        partitions += '<tr data-toggle="table" class="template-upload fade in"><td><b>Partition3:</b></td><td>'+data2["partition"]["partition3"]["type"]+'</td><td>'+data2["partition"]["partition3"]["starting_address"]+'</td><td>'+data2["partition"]["partition3"]["size"]+'</td>';
+                        
+                        partitions += '<tr data-toggle="table" class="template-upload fade in"><td><b>Partition4:</b></td><td>'+data2["partition"]["partition4"]["type"]+'</td><td>'+data2["partition"]["partition4"]["starting_address"]+'</td><td>'+data2["partition"]["partition4"]["size"]+'</td>';
+
+                          $.each(data2["partition"], function(index, element) {
+                            if(!$.isEmptyObject(data2["partition"][index]["details"])){
+
+                              partitions += '<tr></tr></tbody></table> <table  role="presentation" class="table table-striped"><tbody><tr><b>Partition '+index+element["type"]+'</b></tr>';
+
+
+                              partitions += '<tr data-toggle="table" class="template-upload fade in"><td><b>Reserved area:</b></td><td>Start sector: 0</td><td>Ending sector: '+element["details"]["reserved_area"]-1+'</td><td> Size: '+element["details"]["reserved_area"]+'</td>';
+
+                              partitions += '<tr data-toggle="table" class="template-upload fade in"><td  colspan="4"><b>Sectors per cluster:</b>'+element["details"]["sectors_per_cluster"]+' Sectors</td>';
+
+                              partitions += '<tr data-toggle="table" class="template-upload fade in"><td><b>FAT area:</b></td><td>Start sector:'+element["details"]["reserved_area"]+' </td><td>Ending sector: '+(element["details"]["reserved_area"]+element["details"]["no_of_fat"]*element["details"]["size_of_fat"])+'</td>';
+
+                              partitions += '<tr data-toggle="table" class="template-upload fade in"><td  colspan="4"><b># of FATs:</b>'+element["details"]["no_of_fat"]+'</td>';
+
+                              partitions += '<tr data-toggle="table" class="template-upload fade in"><td  colspan="4"><b>The size of each FAT:</b>'+element["details"]["size_of_fat"]+' Sectors</td>';
+
+                              partitions += '<tr data-toggle="table" class="template-upload fade in"><td  colspan="4"><b>The first sector of cluster 2:</b>'+(element["details"]["reserved_area"]+element["details"]["no_of_fat"]*element["details"]["size_of_fat"]+element["details"]["root_directory"])+' Sectors</td>';
+
+                            }
+                          });
+                          
+                          console.log(partitions);
+                          $("#partition_table").html(partitions);
+
+
                       }
                     });
                 });
