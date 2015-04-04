@@ -8,7 +8,7 @@ module MacConversion
       arg = convert_to_binary(arg)
       hour = arg[0..4].to_i(2)
       minute = arg[5..10].to_i(2)
-      second = arg[11..15].to_i(2)
+      second = arg[11..15].to_i(2)*2
       return time_format(hour,minute,second)
     end
 
