@@ -1,5 +1,5 @@
 module MacConversion
-  class Display
+  class Calculation
     def initialize(params)
       @params   = params
     end
@@ -44,15 +44,7 @@ module MacConversion
     def read_file
       File.open(@params[:filename], "r") do |f|
         l=""
-        f.each_line do |line|
-          l = line.strip
-          break
-        end
-        if(l.split[0].length==6)
-          return l.split[0]
-        else
-          return nil
-        end   
+        l = f.readline.strip   
       end
     end
 

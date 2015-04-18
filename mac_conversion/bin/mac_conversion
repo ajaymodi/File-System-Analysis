@@ -1,6 +1,9 @@
 #!/usr/bin/env ruby
+require "optparse"
+require 'date'
 
-require_relative "../lib/mac_conversion"
+require_relative "../lib/mac_conversion/application"
+require_relative "../lib/mac_conversion/calculation"
 
 begin
   MacConversion::Application.new(ARGV).run

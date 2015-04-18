@@ -1,12 +1,13 @@
-require "debugger"
-
+# require "debugger"
 
 module MacConversion
 
   class Application
     def initialize(argv)
-      @params = parse_options(argv)
-      @display = MacConversion::Display.new(@params)
+      @temp = parse_options(argv)
+      @params = @temp[0]
+      @parser = @temp[1]
+      @calculation = MacConversion::Calculation.new(@params)
     end
 
     def self.root(path = nil)
@@ -25,42 +26,66 @@ module MacConversion
     # Bundler.require(:default, Address4Forensics::Application.env)
 
     def run
+
       args = nil
+      
+      if @params[:conversion] == nil 
+        puts "Not a valid format. Use mac_conversion -x for more help "
+        exit 1
+      elsif @params[:hex_value] == nil and @params[:filename] == nil 
+        puts  "Not a valid format. Use mac_conversion -x for more help"
+        exit 1
+      end
+
       if @params[:filename]
-        args = @display.read_file
+        args = @calculation.read_file
       else
         args = @params[:hex_value]
       end
 
-      args = @display.convert_to_little_endian(args)
+      if(args.length==6 and args[0..1]=="0x")
+        args = @calculation.convert_to_little_endian(args)
+      else 
+        puts  "Not a valid format. Use mac_conversion -x for more help"
+        exit 1
+      end
 
-      if @params[:conversion].empty? 
-        puts "You are missing parameters."
-      elsif !@display.check_valid_hex(args)
+      if not @calculation.check_valid_hex(args)
         puts "Enter Valid hex numbers."
+        exit 1
       elsif @params[:conversion]== "convert_time"
-        result = @display.convert_time(args)
+        result = @calculation.convert_time(args)
       elsif @params[:conversion]== "convert_date"
-        result = @display.convert_date(args)
+        result = @calculation.convert_date(args)
       end
       puts result
     end
 
     def parse_options(argv)
-      params = {}
+      params = {:filename => nil, :hex_value => nil, :conversion => nil}   
       parser = OptionParser.new 
+      parser.banner = "Usage: mac_conversion [options]"
       time = nil
-      parser.on("-T") { params[:conversion] = "convert_time" }
-      parser.on("-D") { params[:conversion] = "convert_date"  }
-
-      parser.on("-f","--filename filepath", "summary_of_command") do |filepath|
+      parser.on("-T", "--time", "Use time conversion module. Either -f or -h must be given.") { params[:conversion] = "convert_time" }
+      parser.on("-D", "--date", "Use date conversion module. Either -f or -h must be given.") { params[:conversion] = "convert_date"  }
+      parser.on("-f","--filename filepath", "This specifies the path to a filename that includes a hex value of time or date.","Note that the hex value should follow this notation: 0x1234.","For the multiple hex values in either a file or a command line input,","we consider only one hex value so the recursive mode for a MAC conversion is optional.") do |filepath|
         params[:filename] = filepath
       end
-      parser.on("-h", "--hex_value hex_value", "summary_of_command") do |hex_value|
+      parser.on("-h", "--hex_value hex_value", "This specifies the hex value for converting to either date or time value.","Note that the hex value should follow this notation: 0x1234.","For the multiple hex values in either a file or a command line input,","we consider only one hex value so the recursive mode for a MAC conversion is optional.") do |hex_value|
         params[:hex_value] = hex_value
       end
-      parser.parse(argv)
-      params
+      parser.on("-x", "--help", "Displays help") do
+        puts parser
+        exit 1
+      end
+      begin
+        parser.parse!(argv)
+      rescue OptionParser::ParseError
+        puts  "Not a valid format. Use mac_conversion -x for more help"
+        exit 1
+      end 
+      
+      [params, parser]
     end
   end
 end
