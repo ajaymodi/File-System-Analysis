@@ -1,5 +1,5 @@
 module Address4Forensics
-  class Display
+  class Calculation
     def initialize(params)
       @params   = params
     end

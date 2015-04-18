@@ -6,7 +6,7 @@ module Address4Forensics
   class Application
     def initialize(argv)
       @params = parse_options(argv)
-      @display = Address4Forensics::Display.new(@params)
+      @calculation = Address4Forensics::Calculation.new(@params)
     end
 
     def self.root(path = nil)
@@ -28,11 +28,11 @@ module Address4Forensics
       if @params[:calculation].empty?
         puts "You are missing parameters."
       elsif @params[:calculation]== "calculate_logical_address"
-        answer_in_sectors = @display.calculate_logical_address
+        answer_in_sectors = @calculation.calculate_logical_address
       elsif @params[:calculation]== "calculate_physical_address"
-        answer_in_sectors = @display.calculate_physical_address
+        answer_in_sectors = @calculation.calculate_physical_address
       elsif @params[:calculation]== "calculate_cluster_address"
-        answer_in_sectors = @display.calculate_cluster_address
+        answer_in_sectors = @calculation.calculate_cluster_address
       end
       if(@params[:byte_address])
         if(params[:sector_size])

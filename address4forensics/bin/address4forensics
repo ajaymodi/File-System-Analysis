@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
+require "optparse"
 
-require_relative "../lib/address4forensics"
+require_relative "../lib/address4forensics/application"
+require_relative "../lib/address4forensics/calculation"
 
 begin
   Address4Forensics::Application.new(ARGV).run
