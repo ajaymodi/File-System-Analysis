@@ -3,16 +3,19 @@
 module Address4Forensics
 
   class Application
+
     def initialize(argv)
       @params = parse_options(argv)
       @calculation = Address4Forensics::Calculation.new(@params)
     end
 
+    #Specifies root folder for the project
     def self.root(path = nil)
       @_root ||= File.expand_path(File.dirname(__FILE__))
       path ? File.join(@_root, path.to_s) : @_root
     end
 
+    #Specifies the environment
     def self.env
       @_env ||= ENV['RACK_ENV'] || 'development'
     end
@@ -21,8 +24,7 @@ module Address4Forensics
     def self.initialize!
     end
 
-    # Bundler.require(:default, Address4Forensics::Application.env)
-
+    #Validates the arguments passed for option parser and calculates interchangable address based on description in readme file.
     def run
       if @params[:calculation]==nil
         puts "Not a valid format. Use address4forensics -h for more help "
@@ -57,7 +59,7 @@ module Address4Forensics
       puts answer
     end
 
-    
+    #Parses the input given by user
     def parse_options(argv)
       params = {:calculation => nil, :partition_start_offset => 0, :byte_address => nil,
       :sector_size => 512, :logical_address => nil, :logical_known_address => nil, 

@@ -8,11 +8,13 @@ module MacConversion
       @calculation = MacConversion::Calculation.new(@params)
     end
 
+    #Specifies root folder for the project
     def self.root(path = nil)
       @_root ||= File.expand_path(File.dirname(__FILE__))
       path ? File.join(@_root, path.to_s) : @_root
     end
 
+    #Specifies the environment
     def self.env
       @_env ||= ENV['RACK_ENV'] || 'development'
     end
@@ -21,10 +23,8 @@ module MacConversion
     def self.initialize!
     end
 
-    # Bundler.require(:default, Address4Forensics::Application.env)
-
+    #Validates the arguments passed for option parser and calculates interchangable address based on description in readme file.
     def run
-
       args = nil
       if @params[:conversion] == nil 
         puts "Not a valid format. Use mac_conversion -x for more help "
@@ -58,6 +58,7 @@ module MacConversion
       puts result
     end
 
+    #Parses the input given by user
     def parse_options(argv)
       params = {:filename => nil, :hex_value => nil, :conversion => nil}   
       parser = OptionParser.new 

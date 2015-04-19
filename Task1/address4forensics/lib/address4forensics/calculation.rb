@@ -4,6 +4,7 @@ module Address4Forensics
       @params   = params
     end
 
+    #Calculates the logical address value given either a physical address or cluster address.
     def calculate_logical_address
       address = 0
       if(@params[:cluster_known_address]  == true)
@@ -18,6 +19,7 @@ module Address4Forensics
       return address
     end
 
+    #Converts a cluster address to a physical address.
     def convert_cluster_to_physical_address
         adrs = 0
         no_of_fat = @params[:fat_tables]
@@ -29,6 +31,7 @@ module Address4Forensics
         adrs = add_partition_offset(adrs)+(cluster_known_address-default_cluster_number)*sectors_per_cluster+reserved_sectors+(no_of_fat*sectors_in_fat) 
     end
 
+    #Calculates the physical address value given either a logical address or cluster address.
     def calculate_physical_address
       address = 0
       if(@params[:cluster_known_address]  == true)
@@ -42,6 +45,7 @@ module Address4Forensics
       return address
     end
 
+    #Adds partition offset to convert logical to physical address
     def add_partition_offset adr
       if @params[:partition_start_offset]
         offset = @params[:partition_start_offset]
@@ -51,6 +55,7 @@ module Address4Forensics
       end
     end
 
+    #Subtracts partition offset to convert physical to logical address
     def subtract_partition_offset adr
       if @params[:partition_start_offset]
         offset = @params[:partition_start_offset]
@@ -60,6 +65,7 @@ module Address4Forensics
       end
     end
     
+    #Calculates the cluster address value given either a physical address or logical address.
     def calculate_cluster_address
       address = 0
       if(@params[:logical_known_address]  == true)
@@ -73,6 +79,7 @@ module Address4Forensics
       return address
     end
 
+    #Converts a logical address to a cluster address.
     def convert_logical_to_cluster_address adrs
       # puts @params
       # adrs = @params[:logical_address]
