@@ -1,4 +1,4 @@
-require "debugger"
+# require "debugger"
 
 module Address4Forensics
 
@@ -24,14 +24,20 @@ module Address4Forensics
     # Bundler.require(:default, Address4Forensics::Application.env)
 
     def run
-      puts @params
       if @params[:calculation]==nil
         puts "Not a valid format. Use address4forensics -h for more help "
         exit 1
       elsif not (@params[:calculation]&&(@params[:physical_known_address] or @params[:logical_known_address] or @params[:cluster_known_address]))  
         puts "Not a valid format. Use address4forensics -h for more help "
         exit 1
-      elsif @params[:calculation]== "calculate_logical_address"
+      elsif(@params[:cluster_known_address] || @params[:calculation]== "calculate_cluster_address")
+        if not(@params[:cluster_size] && @params[:reserved_sectors] && @params[:fat_tables] && @params[:fat_length])   
+          puts "Missing parameters for cluster known address. Use address4forensics -h for more help "
+          exit 1
+        end
+      end
+      
+      if @params[:calculation]== "calculate_logical_address"
         answer_in_sectors = @calculation.calculate_logical_address
       elsif @params[:calculation]== "calculate_physical_address"
         answer_in_sectors = @calculation.calculate_physical_address
@@ -42,8 +48,8 @@ module Address4Forensics
       if(@params[:byte_address])
         if(@params[:sector_size])
           answer = answer_in_sectors * @params[:sector_size]
-        else
-          answer = answer_in_sectors * 512
+        # else
+        #   answer = answer_in_sectors * 512
         end
       else
         answer = answer_in_sectors
@@ -53,8 +59,8 @@ module Address4Forensics
 
     
     def parse_options(argv)
-      params = {:calculation => nil, :partition_start_offset => nil, :byte_address => nil,
-      :sector_size => nil, :logical_address => nil, :logical_known_address => nil, 
+      params = {:calculation => nil, :partition_start_offset => 0, :byte_address => nil,
+      :sector_size => 512, :logical_address => nil, :logical_known_address => nil, 
       :physical_address => nil, :physical_known_address => nil, :cluster_address => nil,
       :cluster_known_address => nil, :cluster_size => nil, :reserved_sectors => nil,
       :fat_tables => nil, :fat_length => nil}   
@@ -72,7 +78,7 @@ module Address4Forensics
         opts.on("-C", "--cluster", "Calculate the cluster address from either the logical address or the physical address. ",
           "Either -l or -p must be given.") { params[:calculation] = "calculate_cluster_address"  }
         
-        opts.on("-b", "--partition-start offset", Integer , "This specifies the physical address (sector number) of the start of the partition, ",
+        opts.on("-b", "--partition-start [offset]", Integer , "This specifies the physical address (sector number) of the start of the partition, ",
           "and defaults to 0 for ease in working with images of a single partition. ",
           "The offset vaulue will always translate into logical address 0.") do |offset|
           params[:partition_start_offset] = offset.to_i
@@ -82,7 +88,7 @@ module Address4Forensics
           "this returns the byte address of the calculated value, which is the number of sectors multiplied by ",
           "the number of bytes per sector.") { params[:byte_address]   = true }
         
-        opts.on("-s", "--sector-size bytes", Integer, "When the -B option is used, ",
+        opts.on("-s", "--sector-size [bytes]", Integer, "When the -B option is used, ",
           "this allows for a specification of bytes per sector other than the ",
           "default 512. Has no affect on output without -B.") do |bytes|
           params[:sector_size]   = bytes.to_i 
@@ -115,11 +121,11 @@ module Address4Forensics
           params[:reserved_sectors]   = sectors.to_i 
         end
         
-        opts.on("-t", "--fat_tables tables", Integer, "This specifies the number of FAT tables, which is usually 2.") do |tables|
+        opts.on("-t", "--fat-tables tables", Integer, "This specifies the number of FAT tables, which is usually 2.") do |tables|
           params[:fat_tables]   = tables.to_i
         end
         
-        opts.on("-f", "--fat_length sectors", Integer, "This specifies the length of each FAT table in sectors.") do |sectors|
+        opts.on("-f", "--fat-length sectors", Integer, "This specifies the length of each FAT table in sectors.") do |sectors|
           params[:fat_length]   = sectors.to_i
         end
         
@@ -131,6 +137,7 @@ module Address4Forensics
       begin
         opt_parser.parse!(argv)
       rescue OptionParser::ParseError
+        puts ParseError
         puts  "Not a valid format. Use mac_conversion -h for more help"
         exit 1
       end 
