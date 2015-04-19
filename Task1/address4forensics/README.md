@@ -4,9 +4,7 @@ This  task    is    to    build    two    conversion    utilities: 
 
 Tool  a)    Address    Conversion    
 
-In  order    to    both    simplify    addressing    mechanisms    and    to    reduce    the    number    of    bits    necessary    to    locate    all    areas    within    a    logical    space    (like    a    partition)    that    hold    data,    multiple    addressing    techniques    are    used    on    IBM    PC-­‐compatible    hard    drives    and    in    FAT    file    systems.        You    are    to    write    a    Unix-­‐like    command    line    utility    that    will    convert    between    three    different    address    types    when    an    address    of    a    
-
-different  type    is    given.        Use    the    following    usage    specifications    for    your    utility:    
+In  order    to    both    simplify    addressing    mechanisms    and    to    reduce    the    number    of   bits    necessary    to    locate    all    areas    within    a    logical    space    (like    a    partition)   that    hold    data,    multiple    addressing    techniques    are    used    on    IBM    PC-­‐compatible   hard drives    and    in    FAT    file    systems.        You    are    to    write    a    Unix-­‐like    command   line    utility    that    will    convert    between    three    different    address    types    when    an   address    of    a    different  type    is    given.        Use    the    following    usage    specifications   for    your    utility:    
 
 address4forensics -L|-P|-C [–b offset] [-B [-s bytes]] [-l address] [- p address] [-c address -k sectors -r sectors -t tables -f sectors]
 
@@ -62,7 +60,7 @@ This specifies the number of FAT tables, which is usually 2.
 
 This specifies the length of each FAT table in sectors.
 
-An    example    of    this    in    use    would    be    the    following,    where    the    desired    number    is    the    logical    address    of    
+An    example    of    this    in    use    would    be    the    following,    where    the    desired    number   is    the    logical    address    of    
 
 physical  sector    12345678    in    a    partition    that    begins    at    physical    sector    128:    
 
@@ -70,7 +68,7 @@ $ address4forensics –L –b 128 --physical-known=12345678
 
 12345550
 
-Another  example    shows    the    utility    getting    the    physical    address    of    cluster    58,    in    a    partition    that    begins    at    physical    sector    128,    has    2    FAT    tables    that    are    each    16    sectors    long,    6   reserved    sectors,    and    4    sectors    per    cluster:    
+Another  example    shows    the    utility    getting    the    physical    address    of    cluster    58,    in a    partition    that    begins    at    physical    sector    128,    has    2    FAT    tables    that    are   each    16    sectors    long,    6   reserved    sectors,    and    4    sectors    per    cluster:    
 
 $ address4forensics –P –-partition-start=128 –c 58 –k 4 –r 6 –t 2 –f
 
