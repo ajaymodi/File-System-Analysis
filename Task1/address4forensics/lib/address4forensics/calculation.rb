@@ -69,7 +69,7 @@ module Address4Forensics
       if(@params[:logical_known_address]  == true)
         address = convert_logical_to_cluster_address
       elsif(@params[:physical_known_address]  == true)
-        address = subtract_partition_offset(params[:physical_address])
+        address = subtract_partition_offset(@params[:physical_address])
         address = convert_logical_to_cluster_address
       else
         address = @params[:cluster_address]
@@ -78,7 +78,7 @@ module Address4Forensics
     end
 
     def convert_logical_to_cluster_address
-      adrs = params[:logical_address]
+      adrs = @params[:logical_address]
       no_of_fat = 2  # params[:fat_tables]
       sectors_in_fat = 16 # params[:fat_length]
       reserved_sectors = 6 #params[:reserved_sectors]
