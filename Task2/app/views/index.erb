@@ -36,6 +36,7 @@
           </div>
           <div class="col-xs-6">
             <blockquote id="bq">
+              <!-- Displays calculated results of the added file -->
               <p><b>Result:</b><br>
               <font id ="filename"> </font><br>
               <font id ="md5"> </font><br>
@@ -44,9 +45,7 @@
               </p>
           </blockquote>
           </div>
-        </div>
-        <!-- The table listing the files available for upload/download -->
-        
+        </div>        
     
     <br>
 
@@ -58,7 +57,7 @@
 /*global window, $ */
 $(document).ready(function(){
 
-
+    //adding files on the browser window
     $("#addfiles").on('click',function(){
       var path = $("#path").val();
       var dataString = 'filepath='+path;
@@ -68,7 +67,7 @@ $(document).ready(function(){
       }
       else
       {
-      // AJAX Code To Submit Form.
+      // AJAX Code To Submit Form for adding files.
         $.ajax({
           type: "POST",
           url: "/add_files",
@@ -103,6 +102,7 @@ $(document).ready(function(){
                         $("#sha1").html("<b>SHA1:</b>&nbsp;"+data2["SHA1"]);
                         $("#md5").html("<b>MD5:</b>&nbsp;"+data2["MD5"]);
 
+                        //adding overview of the partition and displays it
                          var partitions = '<table  role="presentation" class="table table-striped"><tbody id="presentation_table" class="files"><tr data-toggle="table" class="template-upload fade in"><td><b>Partitions</td><td><b>Type</td><td><b>Starting Address</td><td><b>Size</b></td>';
 
 
@@ -114,6 +114,7 @@ $(document).ready(function(){
                         
                         partitions += '<tr data-toggle="table" class="template-upload fade in"><td><b>Partition3:</b></td><td>'+data2["partition"]["partition4"]["type"]+'</td><td>'+data2["partition"]["partition4"]["starting_address"]+'</td><td>'+data2["partition"]["partition4"]["size"]+'</td><tr></tr></tbody></table>';
 
+                          //adding detailed partition details and displays it
                           $.each(data2["partition"], function(index, element) {
                             if(!$.isEmptyObject(data2["partition"][index]["details"])){
 

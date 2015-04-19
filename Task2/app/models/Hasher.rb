@@ -4,7 +4,7 @@ require 'digest/sha1'
 $BUFLEN = 1024
 
 class Hasher
-	
+	#Initialize hash function to calculate SHA1 and MD5 for a given file.
 	def initialize(method, filepath)
 		if (method.upcase == "-SHA1")
 			@hashfunc = Digest::SHA1.new

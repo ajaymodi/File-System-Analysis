@@ -1,9 +1,9 @@
 class Partition
 
+	#Initialize the partition type of the partition table based on given HEX value 
 	def initialize()
 		
 		@partition = { 
-		
 		'01' => ' DOS 12-bit FAT',
 		'04' => ' DOS 16-bit FAT for partitions smaller than 32 MB',
 		'05' => ' Extended partition',
@@ -34,6 +34,7 @@ class Partition
 		}		
 	end
 
+	# gets Partition Type detail from the given Hex 
 	def get_partition_type(detail)
 		key = detail[12..13].upcase
 		if(!@partition[key])
@@ -42,19 +43,23 @@ class Partition
 		'('+key+')'+@partition[key]
 	end
 
+	# gets Reserved Area detail from the given Hex
 	def get_reserved_area(detail)
 		hex = convert_to_little_endian(detail[42..47])
 		ra = hex.to_i(16)
 	end
 
+	# gets Sectors per cluster detail from the given Hex
 	def get_sectors_per_cluster(detail)
 		spc = detail[39..40].to_i(16)
 	end
 
+	# gets Number of FAT detail from the given Hex
 	def get_number_of_fat(detail)
 		spc = detail[48..49].to_i(16)
 	end
 
+	# gets Size of FAT detail from the given Hex
 	def get_size_of_fat(detail,file_system)
 		size = 0
 		if(file_system=="06")
@@ -67,21 +72,25 @@ class Partition
 		return size
 	end
 
+	# gets Root Directory detail from the given Hex
 	def get_root_directory(detail)
 		hex = convert_to_little_endian(detail[51..55])
 		size = hex.to_i(16)*32/512
 	end
 
+	# gets Partition Addrss detail from the given Hex
 	def get_partition_address(detail)
 		hex = convert_to_little_endian(detail[24..34])
 		address = hex.to_i(16)
 	end
 
+	# gets Partition Size detail from the given Hex
 	def get_partition_size(detail)
 		hex = convert_to_little_endian(detail[36..46])
 		size = hex.to_i(16)
 	end
 
+	# Converts to little Endian from the given Hex
 	def convert_to_little_endian(arg)
 		arg = arg.gsub(/\s+/, "")  unless arg.nil?
 		if(arg.length==8)

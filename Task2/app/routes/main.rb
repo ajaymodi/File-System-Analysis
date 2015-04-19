@@ -1,9 +1,11 @@
 require 'json'
 
+# Default display 
 get "/" do
   erb :index
 end
 
+# Route handling for adding files
 post "/add_files" do
   puts params
   
@@ -14,6 +16,7 @@ post "/add_files" do
   end
 end
 
+# Route for calculating hash functions and storing them into data folder
 post "/calculate_files" do
   puts params
   
@@ -45,6 +48,7 @@ post "/calculate_files" do
   end
 end
 
+# Calculate the file size of the given file
 def filesize(name)
 	s = File.size?(name)
 	new_s = s
@@ -55,18 +59,22 @@ def filesize(name)
 	return new_s
 end
 
+# Gives the filename out of given fullpath
 def filename(name)
 	File.basename(name)
 end
 
+# Gets the MBR portion of the given Image
 def getMBR filename
 	`hexdump -e '16/1 "%02x " "\n"' -n 512 #{filename}`
 end
 
+# Gets hexdump based on the argument given
 def getbytes(filename, offset, no_of_bytes)
 	`hexdump -e '#{no_of_bytes}/1 "%02x " "\n"' -n #{no_of_bytes} -s #{offset} #{filename}`
 end
 
+# Gets partition details based on the argument given.
 def get_partition_details(filepath)
 	partition_1 = getbytes(filepath, 446, 16)
 	partition_2 = getbytes(filepath, 462, 16)
@@ -97,6 +105,7 @@ def get_partition_details(filepath)
 	return h
 end
 
+# calculates the details of the partition.
 def calculate_details_for_partition(filepath,hash,partition_number,partition_type)
 	vbr = getbytes(filepath,hash[partition_number]["starting_address"]*512, 512)
 	p = Partition.new

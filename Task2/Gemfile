@@ -1,6 +1,5 @@
 source :rubygems
 
 gem 'thin'
-gem 'debugger'
 gem 'sinatra'
 gem 'json'
