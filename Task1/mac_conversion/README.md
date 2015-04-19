@@ -1,10 +1,6 @@
 Tool  b)    MAC    Conversion    
 
-The  purpose    of    this    task    is    to    write    code    that    performs    the    MAC    conversion    based    on    the    following    
-
-usage  specification    and    input/output    scheme.    This    conversion    MUST    follow    the    procedure    that    we    
-
-discussed    in    the    lecture    note    #6.    We    assume    a    little    endian    ordering    is    applied.        
+We    assume    a    little    endian    ordering    is    applied.        
 
 mac_conversion -T|-D [–f filename | -h hex value ]
 
