@@ -1,12 +1,10 @@
-# require "debugger"
+#require "debugger"
 
 module MacConversion
 
   class Application
     def initialize(argv)
-      @temp = parse_options(argv)
-      @params = @temp[0]
-      @parser = @temp[1]
+      @params = parse_options(argv)
       @calculation = MacConversion::Calculation.new(@params)
     end
 
@@ -28,7 +26,6 @@ module MacConversion
     def run
 
       args = nil
-      
       if @params[:conversion] == nil 
         puts "Not a valid format. Use mac_conversion -x for more help "
         exit 1
@@ -84,8 +81,7 @@ module MacConversion
         puts  "Not a valid format. Use mac_conversion -x for more help"
         exit 1
       end 
-      
-      [params, parser]
+      params
     end
   end
 end
