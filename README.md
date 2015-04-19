@@ -1,1 +1,1 @@
-# CNF_Project
+The  purpose    of    this    project    is    to    write    code    that    pertains    to    each    of    the    three    main    tasks    of    the    forensic    process:    acquisition,    authentication,    and    analysis.        Since    the    project    will    require    many    address    conversions,    you    are    also    required    to    write    a    utility    that    can    convert    between    multiple    hard    drive    address    types,    the    details    of    which    are    below.    
