@@ -1,6 +1,4 @@
-#default root
 require 'json'
-require 'debugger'
 
 get "/" do
   erb :index
@@ -48,7 +46,13 @@ post "/calculate_files" do
 end
 
 def filesize(name)
-	File.size?(name)
+	s = File.size?(name)
+	new_s = s
+	while(s>1000)
+		s = s/1000
+		new_s = new_s * 1024 / 1000
+	end
+	return new_s
 end
 
 def filename(name)
