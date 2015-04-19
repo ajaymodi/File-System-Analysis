@@ -4,7 +4,7 @@ This  task    is    to    build    two    conversion    utilities: 
 
 Tool  a)    Address    Conversion    
 
-In  order    to    both    simplify    addressing    mechanisms    and    to    reduce    the    number    of   bits    necessary    to    locate    all    areas    within    a    logical    space    (like    a    partition)   that    hold    data,    multiple    addressing    techniques    are    used    on    IBM    PC-­‐compatible   hard drives    and    in    FAT    file    systems.        You    are    to    write    a    Unix-­‐like    command   line    utility    that    will    convert    between    three    different    address    types    when    an   address    of    a    different  type    is    given.        Use    the    following    usage    specifications   for    your    utility:    
+In  order    to    both    simplify    addressing    mechanisms    and    to    reduce    the    number    of   bits    necessary    to    locate    all    areas    within    a    logical    space    (like    a    partition)   that    hold    data,    multiple    addressing    techniques    are    used    on    IBM    PC-­‐compatible   hard drives    and    in    FAT    file    systems.        You    are    to   write    a    Unix-­‐like    command   line    utility    that    will    convert    between    three    different    address    types    when    an   address    of    a    different  type    is    given.        Use    the    following    usage    specifications   for    your   utility:    
 
 address4forensics -L|-P|-C [–b offset] [-B [-s bytes]] [-l address] [- p address] [-c address -k sectors -r sectors -t tables -f sectors]
 
