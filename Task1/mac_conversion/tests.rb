@@ -2,6 +2,7 @@
 # which has the UNIX cat command present
 
 require "open3"
+require "debugger"
 
 working_dir = File.dirname(__FILE__)
 # test1_file = "#{working_dir}/data/test1.txt"
@@ -9,15 +10,25 @@ working_dir = File.dirname(__FILE__)
 
 ############################################################################
 
-output  = `address4forensics -L -b 128 --physical-known=12345678`
-
-fail "Failed to calculate correct Logical address" unless output == 12345550
+output  = `mac_conversion -T -h 0x3476`
+fail "Failed to calculate correct time conversion" unless output.strip == 'Time: 2:49:40 PM'
 
 ############################################################################
 
-output  = `address4forensics -P --partition-start=128 -c 58 -k 4 -r 6 -t 2 f 16`
+output  = `mac_conversion -D -h 0x6852`
+fail "Failed to calculate correct date conversion " unless output.strip == 'Date: Mar 08, 2021'
 
-fail "Failed to calculate correct physical addres " unless output == 390
+############################################################################
+
+output  = `mac_conversion -D -f data/test1.txt`
+
+fail "Failed to calculate correct date conversion" unless output.strip == 'Date: Feb 15, 2013'
+
+############################################################################
+
+output  = `mac_conversion -T -f data/test1.txt`
+
+fail "Failed to calculate correct time conversion " unless output.strip == 'Time: 8:18:30 AM'
 
 
 puts "You passed the tests, yay!"
